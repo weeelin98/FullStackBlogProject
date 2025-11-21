@@ -7,17 +7,19 @@ require('dotenv').config();
 const PORT = process.env.PORT || 3000; 
 
 //EJS
-app.set('view engine', 'ejs');
+app.set("view engine", "ejs");
 
 //routes
-
-app.get('/auth/login', (req, res) => {
-    res.json({msg: "Login"});
+//Render login page
+app.get("/auth/login", (req, res) => {
+    res.render("login.ejs");
 });
-
-
-
+//Render register page
+app.get("/auth/register", (req, res) => {
+    res.render("register.ejs");
+});
 //start server
+
 mongoose
 .connect(process.env.MONGODB_URL)
 .then(()=>{
