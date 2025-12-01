@@ -1,4 +1,14 @@
 {
+  "name": "fullstackblogproject",
+  "version": "1.0.0",
+  "description": "A full-stack blog project with user authentication",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC", 
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "dotenv": "^17.2.3",
