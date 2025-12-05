@@ -7,7 +7,7 @@ require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const passport = require('passport');
 const session = require('express-session');
-const MongoStore = require("connect-mongo");
+const MongoStore = require("connect-mongo").default || require("connect-mongo");
 
 
 
