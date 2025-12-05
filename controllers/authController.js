@@ -1,32 +1,36 @@
 
+const passport = require("passport");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 
 
 //Render login page
 exports.getLogin = (req, res) => {
-    res.render("login.ejs"); 
-}
+    res.render("login.ejs",{error: null}); 
+};
 
 
 //Render login page
-exports.login = async (req, res) => {
-    const { email, password } = req.body; 
-    try {
-        //find user 
-        const user = await User.findOne({email});
-        const isMatch = await User.findOne({password});
-
-        if(user && isMatch){
-            res.send("Login successful");
-        }else{
-            res.send("Invalid credentials");
-        }   
-    } catch (error) {
-        res.send(error);
-    }
-
-}
+exports.login = async (req, res, next) => {
+    passport.authenticate("local",(err,user,info)=>{
+        if(err){
+            return next(err);
+        }
+        if(!user){
+            return res.render("login",{
+                title: "Login",
+                user: req.username,
+                error: info.message,
+            });
+        }
+        req.logIn(user, (err)=>{
+            if(err){
+                return next(err);
+            }
+            return res.redirect("/");
+        })
+    })(req,res,next);
+};
 
 
 
@@ -34,7 +38,7 @@ exports.login = async (req, res) => {
 exports.getRegister = (req, res) => {
     res.render("register",{error: null});
    
-}
+};
 
 
 //Register logic
