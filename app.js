@@ -1,60 +1,65 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const passportConfig = require("./config/passport");
-const User = require('./models/User');
-require('dotenv').config();
-const authRoutes = require('./routes/authRoutes');
 const passport = require('passport');
 const session = require('express-session');
-const MongoStore = require("connect-mongo").default || require("connect-mongo");
+const MongoStore = require('connect-mongo'); // 导入 connect-mongo
+const passportConfig = require("./config/passport");
+const authRoutes = require('./routes/authRoutes');
 
-
-
-
-// port
+// 端口设置
 const PORT = process.env.PORT || 3000; 
 
-
-// middlewares
+// 中间件：解析表单数据
 app.use(express.urlencoded({ extended: true }));
 
-//session middleware
+// Session 中间件
+// 修复点：使用防御性写法，确保无论 connect-mongo 如何导出都能找到 create 方法
 app.use(
     session({
-        secret:"Keyboard cat",
+        secret: "Keyboard cat",
         resave: false,
-        saveUninitialized: true,
-        store:MongoStore.create({mongoUrl: process.env.MONGODB_URL}),
+        saveUninitialized: false,
+        store: (MongoStore.create ? MongoStore : MongoStore.default).create({
+            mongoUrl: process.env.MONGODB_URL
+        }),
     })
 );
 
-
-
-//passport middleware
+// Passport 初始化
 passportConfig(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 
-//EJS
+// 设置 EJS 模板引擎
 app.set("view engine", "ejs");
 
-//routes
+// --- 路由设置 ---
+
+// 1. 根路径重定向：不需要 home.ejs，直接重定向到登录页
+app.get("/", (req, res) => {
+    res.redirect("/auth/login");
+});
+
+// 2. 挂载认证路由
 app.use("/auth", authRoutes);
 
-//start server
+// --- 数据库连接与服务器启动 ---
 
 mongoose
 .connect(process.env.MONGODB_URL)
-.then(()=>{
-    console.log("Connected to MongoDB");
-    console.log("Database name:", mongoose.connection.db.databaseName); // Log the database name
+.then(() => {
+    console.log("Connected to MongoDB successfully!");
+    console.log("Database name:", mongoose.connection.db.databaseName); 
+    
+    // 只在这里启动一次服务器监听，防止端口冲突错误
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
     });
-}).catch(()=>{
-    console.error("Failed to connect to MongoDB");
 })
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+.catch((err) => {
+    console.error("Database connection failed:", err.message);
 });
+
+// ❌ 已经删除了原本代码最后一行多余且会导致报错的 app.listen(PORT)

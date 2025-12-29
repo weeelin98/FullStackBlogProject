@@ -6,7 +6,8 @@ const{
     getLogin,
     login,
     getRegister,
-    register
+    register,
+    logout
 } = require("../controllers/authController");
 const userRoutes = express.Router();
 
@@ -27,6 +28,9 @@ userRoutes.get("/register", getRegister)
 
 //Main logic for user registration
 userRoutes.post("/register", register);
+
+//Logout
+userRoutes.get("/logout",logout);
 
 // 添加在注册路由之后（第52行之后）
 // 临时测试路由 - 查看所有用户

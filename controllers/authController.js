@@ -6,7 +6,11 @@ const bcrypt = require("bcryptjs");
 
 //Render login page
 exports.getLogin = (req, res) => {
-    res.render("login.ejs",{error: null}); 
+    res.render("login.ejs",{
+        title: "Login",
+        error: "",
+        user: req.user,
+    }); 
 };
 
 
@@ -19,7 +23,7 @@ exports.login = async (req, res, next) => {
         if(!user){
             return res.render("login",{
                 title: "Login",
-                user: req.username,
+                user: req.user,
                 error: info.message,
             });
         }
@@ -35,9 +39,13 @@ exports.login = async (req, res, next) => {
 
 
 //Get register page
+// 建议修改 getRegister
 exports.getRegister = (req, res) => {
-    res.render("register",{error: null});
-   
+    res.render("register", {
+        title: "Register", 
+        error: null,
+        user: req.user || null 
+    });
 };
 
 
@@ -52,7 +60,7 @@ exports.register = async(req, res) => {
         if(existingUser){
             return  res.render('register', {
             title: 'Register',
-            user: req.username,
+            user: req.user,
             error: "User already exists",
 
         });
@@ -70,8 +78,18 @@ exports.register = async(req, res) => {
     }catch(error){
        res.render('register', {
             title: 'Register',
-            user: req.username,
+            user: req.user,
             error: error.message,
         });
     } 
+}
+
+//Logout logic
+exports.logout = (req, res) => {
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+        res.redirect("/auth/login");
+    });
 }
