@@ -19,24 +19,26 @@ const postSchema = new mongoose.Schema({
         required: true,
         ref: "User",
     },
-    image:[{
-       url:{
-        type: String,
-        required: true
-       },
-       Public_id: {
-        type: String,
-        required: true
-       },    
-    }],
+    // image:[{
+    //    url:{
+    //     type: String,
+    //     required: true
+    //    },
+    //    Public_id: {
+    //     type: String,
+    //     required: true
+    //    },    
+    // }],
     comments:[
         {
             type: mongoose.Schema.Types.ObjectId,
             ref:"Comment"
         }
     ],
-    timestamps: true,
+ 
+},{
+       timestamps: true,
 });
 
-const Post = mongoose.model("User", postSchema);
+const Post = mongoose.model("Post", postSchema);
 module.exports = Post;

@@ -7,6 +7,8 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo'); // 导入 connect-mongo
 const passportConfig = require("./config/passport");
 const authRoutes = require('./routes/authRoutes');
+const postRoutes = require('./routes/postRoutes');
+const e = require('express');
 
 // 端口设置
 const PORT = process.env.PORT || 3000; 
@@ -39,11 +41,16 @@ app.set("view engine", "ejs");
 
 // 1. 根路径重定向：不需要 home.ejs，直接重定向到登录页
 app.get("/", (req, res) => {
-    res.redirect("/auth/login");
+    res.render("home", {
+        user: req.user,
+        error: "",
+        title:"home"
+    });
 });
 
 // 2. 挂载认证路由
 app.use("/auth", authRoutes);
+app.use("/posts", postRoutes);
 
 // --- 数据库连接与服务器启动 ---
 
