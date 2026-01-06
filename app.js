@@ -52,6 +52,27 @@ app.get("/", (req, res) => {
 app.use("/auth", authRoutes);
 app.use("/posts", postRoutes);
 
+
+
+//testing 
+app.use((err, req, res, next) => {
+    console.log("====================================");
+    console.log(" 捕获到中间件报错 (Middleware Error):");
+    // 使用 JSON.stringify 展开错误对象
+    console.log(JSON.stringify(err, null, 2)); 
+    
+    // 如果错误是 Multer 抛出的，可能包含 code 字段
+    if (err.message) console.log("报错信息:", err.message);
+    console.log("====================================");
+
+    // 防止页面一直转圈，给前端返回一个错误页
+    res.render("newPost", {
+        title: "Create Post",
+        error: "Upload Failed: " + (err.message || "Unknown Error"),
+        user: req.user || null
+    });
+});
+
 // --- 数据库连接与服务器启动 ---
 
 mongoose

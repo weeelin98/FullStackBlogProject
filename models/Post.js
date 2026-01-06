@@ -19,16 +19,16 @@ const postSchema = new mongoose.Schema({
         required: true,
         ref: "User",
     },
-    // image:[{
-    //    url:{
-    //     type: String,
-    //     required: true
-    //    },
-    //    Public_id: {
-    //     type: String,
-    //     required: true
-    //    },    
-    // }],
+    image:[{
+       url:{
+        type: String,
+        required: true
+       },
+       public_id: {
+        type: String,
+        required: true
+       },    
+    }],
     comments:[
         {
             type: mongoose.Schema.Types.ObjectId,

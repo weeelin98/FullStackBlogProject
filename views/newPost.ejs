@@ -1,4 +1,4 @@
-<form action="/posts/add" method="post">
+<form action="/posts/add" method="post"enctype="multipart/form-data">
     <div>
         <label for="title">Title</label>
         <input type="text" name="title" id="title" placeholder="Title" /> 
@@ -7,5 +7,14 @@
         <label for="Content">Content</label>
         <textarea name="content" id="content" cols="30" rows="10"></textarea>
     </div>
+    <div>
+        <label for="image">Image</label>
+        <input multiple type="file" name="images" id="image" multiple />
+    </div>  
+    <!-- <div>
+        <label for="image">Image</label>
+        <input type="file" name="image" id="image"/>
+  
+    </div> -->
     <button type="submit">Submit</button>
 </form>
