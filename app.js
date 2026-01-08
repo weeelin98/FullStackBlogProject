@@ -8,7 +8,8 @@ const MongoStore = require('connect-mongo'); // 导入 connect-mongo
 const passportConfig = require("./config/passport");
 const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
-const e = require('express');
+const errorHandler = require("./middlewares/errorHandler");
+// const e = require('express');
 
 // 端口设置
 const PORT = process.env.PORT || 3000; 
@@ -52,6 +53,9 @@ app.get("/", (req, res) => {
 app.use("/auth", authRoutes);
 app.use("/posts", postRoutes);
 
+
+//error handler
+app.use(errorHandler);
 
 
 //testing 
