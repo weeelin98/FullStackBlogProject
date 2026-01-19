@@ -1,6 +1,14 @@
 // [routes/postRoutes.js]
 const express = require("express");
-const { getPostForm, createPost } = require("../controllers/postController");
+const { 
+    getPostForm, 
+    createPost, 
+    getPosts, 
+    getPostById, 
+    getEditPostForm, 
+    updatePost, 
+    deletePost 
+} = require("../controllers/postController");
 
 const { ensureAuthenticated } = require("../middlewares/auth");
 
@@ -13,5 +21,8 @@ postRoutes.get("/add", getPostForm);
 
 // 使用中间件处理上传
 postRoutes.post("/add", ensureAuthenticated, upload.array("images", 5), createPost); 
+
+// get all posts
+postRoutes.get("/", getPosts);
 
 module.exports = postRoutes;
