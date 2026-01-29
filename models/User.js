@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         public_id: String,
     },
-    boi:{
+    bio:{
         type: String,
     },
     posts:[{
