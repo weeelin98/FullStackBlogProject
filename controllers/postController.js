@@ -199,15 +199,3 @@ exports.deletePost = asyncHandler(async (req, res) => {
   await Post.findByIdAndDelete(req.params.id);
   res.redirect("/posts");
 });
-
-// Get all posts
-exports.getPosts = asyncHandler(async (req, res) => {
-  const posts = await Post.find();
-  res.render("posts", {
-    title: "All Posts",
-    posts,
-    user: req.user,
-    error: "",
-    success: "",
-  });
-});
